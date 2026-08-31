@@ -80,6 +80,7 @@ In the order the argument runs, all in [`figures/`](figures/).
 
 | figure | shows |
 |---|---|
+| [fig16 — selection heuristic refuted](figures/fig16_family_selection_refuted.png) | Choosing training data by ink family does not improve transfer: the same-family pair loses on one target and wins on the other, because one set wins both. |
 | [fig7 — Scroll 5 validation](figures/fig7_scroll5_validation.png) | Our read of a real, read, held-out scroll (top) beside the community's prediction of the same segment (bottom). |
 | [fig8 — the same region, zoomed](figures/fig8_scroll5_zoom_pair.png) | 3 × 2 cm from both predictions for direct comparison. |
 
@@ -265,3 +266,35 @@ decisive comparison: PHerc 1667's dense-family signature was measured at
 manufacture the dense signature. The families reflect the objects. Caveats:
 one fragment carries the energy control, and the dense-family fragments have
 no multi-energy scans of their own.
+
+**Choosing training data by ink family does not work.** The natural
+application of the ink-family finding is to pick training scrolls from the
+target's own family. We tested it directly — two held-out targets, one per
+family, each probed by a same-family and a cross-family training pair at
+matched budget (two fragments, 15 000 iterations per condition) — and family
+membership does not predict transfer. On the dense-ink target the same-family
+pair *lost* by 0.154 AUC; on the carbon target it won by 0.300, because one
+training set won both targets. Data volume does not explain it: the set with
+the most labeled ink (20.2 M pixels) lost, and the winner carries less than
+half of that. Label *density* separates them — labeled ink as a fraction of
+the supervised region, 0.12–0.18 for the winner against 0.06–0.09 for the
+losers — which follows from the patch sampler requiring 5 % labeled coverage.
+Density and family are perfectly aligned in this corpus, so the two cannot be
+fully separated here. The recommendation that survives is duller than the one
+we set out to test: rank candidate training fragments by label density, not
+by ink-contrast family. An earlier version of the study report called the
+clusters "exploitable" for training-scroll selection; that claim is retracted
+there.
+
+![The selection heuristic, tested and refuted. Same-family training loses on the dense-ink target and wins on the carbon target, because one training set wins both.](figures/fig16_family_selection_refuted.png)
+
+**Image-space acquisition differences cannot explain the batch silence, and
+the statement now carries a margin.** Readable Scroll 5 data at 9.36 µm
+already sits at the eligible batch's high-frequency content (gradient energy
+5.15 against their 5.8) and reads perfectly well. Blurred further, reading
+survives to 2.96 — about half the eligible level, where co-location with the
+community's read actually peaks — and collapses only at 1.80, roughly a
+third of it. Image sharpness would have to halve again from the eligible
+batch's own value before this pipeline goes silent. What remains, and what
+image-space simulation cannot reach, is ink chemistry outside the classic
+corpus and propagation physics at 1.2 m.
