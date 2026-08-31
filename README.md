@@ -57,6 +57,7 @@ In the order the argument runs, all in [`figures/`](figures/).
 | [fig11 — rung 8, sim to real](figures/fig11_rung8_real79um_read.png) | The same model, zero-shot on a *real* 7.9 µm scan of that scroll. Noisier, same rows legible — the recipe survives the jump from simulated to real acquisitions. |
 | [fig1 — the calibration bar](figures/fig1_positive_control.png) | Density-picked crops of a true positive: closed loops, consistent stroke width, letters on a baseline. Every negative in this submission is judged against this. |
 | [fig12 — cross-scroll transfer](figures/fig12_benchmark_crossscroll_overlay.png) | A benchmark fold: green is ink recovered on a held-out scroll's fragment by a model that never saw that scroll, red is the fragment surface. This is what the AUC numbers look like as an image. |
+| [fig15 — the scaling law](figures/fig15_budget_scaling_curve.png) | Held-out cross-scroll AUC against training exposure per fragment: log-linear at +0.101 per doubling, still climbing at the largest budget run, and passing the within-scroll model that had less training. |
 | [fig2 — the model-validation control](figures/fig2_exp6_model_validation.png) | The exact checkpoint used on the eligible scrolls, reading a simulated-8.64 µm PHerc 1667 fragment. Without this the negatives would be unfalsifiable. |
 
 **The negatives — the eligible scrolls under that same validated model**
