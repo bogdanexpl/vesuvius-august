@@ -1,0 +1,30 @@
+{
+  "out_dir": "/data/vesuvius/runs/ink_tutorial",
+  "seed": 42,
+
+  "mode": "flat",
+  "model_type": "vesuvius_unet",
+  "in_channels": 1,
+  "model_config": { "autoconfigure": true, "z_projection_mode": "max" },
+  "targets": { "ink": { "out_channels": 1, "activation": "none", "z_projection_mode": "max" } },
+
+  "patch_size": [64, 256, 256],
+  "patch_overlap": 0.5,
+  "patch_min_labeled_coverage": 0.05,
+
+  "batch_size": 2,
+  "num_iterations": 20000,
+  "learning_rate": 0.01,
+  "mixed_precision": "fp16",
+  "dataloader_workers": 8,
+
+  "val_every": 500,
+  "save_every": 1000,
+
+  "datasets": [
+    {
+      "segments_path": "/data/vesuvius/ink-dataset/phercparis4",
+      "volume_scale": "0"
+    }
+  ]
+}

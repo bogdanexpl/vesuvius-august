@@ -1,0 +1,40 @@
+{
+  "out_dir": "/data/vesuvius/runs/ink_sim86_resnet_ft",
+  "seed": 42,
+  "mode": "flat",
+  "model_type": "resnet3d",
+  "in_channels": 1,
+  "model_config": {
+    "model_depth": 50,
+    "pretrained": false,
+    "decoder_upscale": 4
+  },
+  "targets": {
+    "ink": {
+      "out_channels": 1,
+      "activation": "none"
+    }
+  },
+  "checkpoint": "/data/vesuvius/models/resnet50_7.9um_scroll1_frags/koine_wrapped.pth",
+  "weights_only": true,
+  "patch_size": [
+    18,
+    256,
+    256
+  ],
+  "patch_overlap": 0.5,
+  "patch_min_labeled_coverage": 0.05,
+  "batch_size": 8,
+  "num_iterations": 5000,
+  "learning_rate": 0.0005,
+  "mixed_precision": "fp16",
+  "dataloader_workers": 8,
+  "val_every": 500,
+  "save_every": 1000,
+  "datasets": [
+    {
+      "segments_path": "/data/vesuvius/ink-dataset/phercparis4_sim86",
+      "volume_scale": "0"
+    }
+  ]
+}
