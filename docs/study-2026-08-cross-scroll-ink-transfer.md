@@ -188,9 +188,16 @@ every other scroll's held-out fragment (mask-restricted AUC; `pw_*` runs,
 Italic = within-scroll (different fragment). Read: Paris 1 ↔ PHerc 51 form a
 tight cluster (≈0.74 both directions, at Paris 1's own ceiling); PHerc 1667 is
 isolated in both directions; Paris 2 receives moderately from all but exports
-less. Chemistry clusters are therefore both real and *exploitable*: selecting
-or synthesizing training scrolls near the target's cluster is a concrete
-strategy for the eligible batch. Interactive figure: "Herculaneum Transfer
+less. Chemistry clusters are therefore real. **Whether they are *exploitable* for
+training-set selection was tested directly after this submission was prepared,
+and the answer is no**: a matched A/B (two held-out targets, one per family,
+15 000 iterations each) found that selection by family lost — the carbon-family
+training pair beat the dense-family pair on the dense-family target by 0.154
+AUC, while winning its own target by 0.300. One training set won both. Label
+density (labeled ink as a fraction of the supervised region) separates the sets
+where family does not, though this corpus cannot fully disentangle the two.
+An earlier version of this paragraph claimed exploitability; that claim is
+retracted. Interactive figure: "Herculaneum Transfer
 Map" (project artifact).
 
 ## 8. Next phase (started)
