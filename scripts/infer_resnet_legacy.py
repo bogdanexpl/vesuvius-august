@@ -4,14 +4,17 @@ The post-refactor koine infer.py hard-codes tifxyz_robust normalization; the
 2023/24 resnet pipeline trained on uint8 layers clipped to [0,200] then /255.
 This driver reproduces that so preprocessing-mismatch can be ruled out.
 
+Requires INK_DETECTION_REPO pointing at a villa `ink-detection` checkout
+(for the koine imports).
+
 Usage: .venv/bin/python infer_resnet_legacy.py <zarr> <wrapped_ckpt> <out_tif>
          [--layer-start N] [--layer-end N] [--patch 256] [--stride 192]
 """
-import argparse, sys
+import argparse, os, sys
 import numpy as np
 import tifffile, torch, zarr
 
-sys.path.insert(0, "/home/ubuntu/code/vesuvius/villa/ink-detection")
+sys.path.insert(0, os.environ.get("INK_DETECTION_REPO", "villa/ink-detection"))
 from koine_machines.models.resnet3d import ResNet3DSegmentationModel
 
 

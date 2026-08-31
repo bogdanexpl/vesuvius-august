@@ -6,8 +6,11 @@ experiments on one RTX A6000, all data from the public open-data bucket.*
 **What this contributes, in order of usefulness to someone reading scrolls:**
 
 1. **Cross-scroll ink detection improved from AUC 0.62 to 0.868 on the public
-   fragment data** — no new labels, no new architecture, just training past
-   the point everyone (ourselves included) had stopped. The gain is
+   fragment data** (0.62 = our own six-fold LOSO macro average at
+   community-practice budgets; 0.868 = best held-out fragment after scaling;
+   like-for-like on that same fragment: 0.61 → 0.868) — no new labels, no
+   new architecture, just training past the point everyone (ourselves
+   included) had stopped. The gain is
    log-linear at +0.101 AUC per doubling of per-fragment exposure and was
    still climbing when we ran out of schedule. Every published cross-scroll
    number, ours included, is a lower bound set by budget rather than by ink
@@ -29,8 +32,9 @@ experiments on one RTX A6000, all data from the public open-data bucket.*
    image-space acquisition statistics each excluded by experiment. This is
    the "no signal versus signal present but unrecovered" diagnostic the
    2026 open-problems post asked for, resolved to a batch-level cause.
-5. **Four upstream bug reports**, two with working patches — including two
-   silent failures that produce plausible-looking garbage rather than errors.
+5. **Four upstream bug reports**, one with a working patch and one with a
+   validated detector tool — including two silent failures that produce
+   plausible-looking garbage rather than errors.
    [docs/vc3d-bug-reports.md](docs/vc3d-bug-reports.md).
 
 ## Quickstart
@@ -58,7 +62,17 @@ It exits non-zero if anything failed, so it drops straight into a pipeline:
 python scripts/validate_surface.py "$SEG/vol.zarr" --quiet || { echo "skipping $SEG"; continue; }
 ```
 
-**Rebuild the benchmark corpus** (public fragments, ~16 GB):
+> **Prerequisites for the training/inference stages:** the ScrollPrize
+> [villa](https://github.com/ScrollPrize/villa) `ink-detection` component
+> (koine), checked out with its own venv — we used commit `4b8694ab`
+> (2026-07-13). Point `INK_VENV_PY` at that venv's `python` (used by
+> `exp4_loso.sh` and the probe drivers) and `INK_DETECTION_REPO` at the
+> checkout (used by `infer_resnet_legacy.py`). `downsample_to_sim86.py`
+> additionally needs `torch` and the Scroll 1 ink-tutorial dataset. The
+> data-root constants at the top of the Python scripts assume
+> `/data/vesuvius` — edit them for your layout.
+
+**Rebuild the benchmark corpus** (public fragments, ~34 GB):
 
 ```bash
 python scripts/exp4_fetch_frags.py          # fetches + packs 8 fragments, 6 scrolls
@@ -124,7 +138,7 @@ for two upstream bugs found on the way).
 | 6b | rung-4 model | **all 14 published 1447 segments** | uniform honeycomb false-positive texture (1.6–5.7 % strong activations), zero letterforms anywhere |
 | 7 | **acquisition-matched fine-tune**: measured real-vs-sim stats (real render has 2.3× less high-frequency energy, grad-std 5.8 vs 13.6, and a brighter/narrower histogram), rebuilt the sim dataset with 3D gaussian PSF blur + quantile LUT to real statistics, re-fine-tuned | sim: still reads Greek (sanity holds); real 1447: still amorphous blobs | **matching second-order statistics does not close the gap** |
 | 8 | rung-7 model, zero-shot | **real 7.9 µm scan** of the same Scroll 1 segment (original volpkg layers) | **reads the same Greek rows from the real 7.9 µm acquisition** — noisier than sim but clearly legible. The sim-trained model transfers to real scans. |
-| 9 | rung-7 model, zero-shot | **46 self-grown segments across three 8.64 µm scrolls** (PHerc 1447 published + our own headless `vc_grow_seg_from_seed` segments on 1447/1218/0800/0268; multiple z-bands, inner/mid/outer windings) | uniformly quiet near-zero predictions (0.3–1.1 % strong activations, edge artifacts only), zero letterforms anywhere |
+| 9 | rung-7 model, zero-shot | **46 self-grown segments across three 8.64 µm scrolls** (our own headless `vc_grow_seg_from_seed` segments on 1218/0800/0268, five z-bands, inner/mid/outer windings; the 14 published 1447 segments were covered in rung 6) | uniformly quiet near-zero predictions (0.3–1.1 % strong activations, edge artifacts only), zero letterforms anywhere |
 | 10 | **the decisive control** — proven 2.4 µm Scroll-1 model, zero-shot | **PHerc 1203 at its native 2.4 µm scan** (same protocol class as the training scan; 4 self-grown segments) | tile-level noise, no letterforms; row-pitch statistics inconsistent across segments (blob noise, not lines). **Cross-scroll transfer fails even with resolution and protocol held equal.** |
 
 Every result below has an image behind it; see **Figures**.
@@ -191,8 +205,8 @@ In the order the argument runs, all in [`figures/`](figures/).
    open-problems post's §7, now with a controlled experiment behind it.
 4. **The 8.64 µm batch silence (rung 9) is therefore primarily a chemistry/
    domain problem.** A model that provably reads real 7.9 µm Scroll 1 (rung 8)
-   and simulated 8.6 µm (rung 4) finds nothing on 46 segments spanning four
-   sampling campaigns across PHerc 1447, 1218, 800 and 268 — multiple z-bands,
+   and simulated 8.6 µm (rung 4) finds nothing on 60 segments across PHerc 1447, 1218, 800 and 268
+   (all 14 published 1447 segments + 46 self-grown) — multiple z-bands,
    inner to outer windings — and the rung-10 control shows the same silence at
    native 2.4 µm on 1203. Acquisition physics may still contribute at 8.64 µm,
    but it is not the primary blocker; a test scan of a known-ink object under
@@ -205,16 +219,18 @@ In the order the argument runs, all in [`figures/`](figures/).
 
 Work after the ladder materially refines conclusions 3–4 above.
 
-1. **First public cross-scroll ink benchmark (LOSO).** 8 IR-labeled fragments
-   from 6 physical scrolls (public, `scripts/exp4_fetch_frags.py`), trained
-   leave-one-scroll-out + full 4×4 pairwise matrix. Structure: Paris1↔PHerc51
-   form a tight transfer cluster at ceiling; PHerc 1667 is isolated near
-   chance in both directions.
+1. **To our knowledge the first public cross-scroll ink benchmark (LOSO).**
+   8 IR-labeled fragments from 6 physical scrolls (public,
+   `scripts/exp4_fetch_frags.py`), trained leave-one-scroll-out, plus a full
+   4×4 pairwise matrix on the first 4-scroll / 6-fragment corpus. Structure:
+   Paris1↔PHerc51 form a tight transfer cluster at ceiling; PHerc 1667 is
+   isolated — near chance in the six-fold LOSO (0.509), weakest matrix node
+   in both directions (0.54–0.63).
 2. **Every cross-scroll number is a training-budget lower bound.** Crossing
    corpus size × budget shows held-out AUC is monotone in *iterations per
    training fragment* (r = +0.98): .548 → .868 from 714 → 7500 it/frag,
    log-linear **+0.101 AUC per doubling**, unsaturated. At matched budget the
-   cross-scroll penalty is only **−0.02…−0.04 AUC** (~95–97 % of
+   cross-scroll penalty is only **−0.02…−0.04 AUC** (~94–97 % of
    within-scroll), and a cross-scroll model at 30k *beats* the within-scroll
    ceiling at 15k. The community's "models don't generalize across scrolls" —
    and our own rung-10 phrasing — is largely (not entirely) an
@@ -233,9 +249,10 @@ Work after the ladder materially refines conclusions 3–4 above.
    surface explanations and generalized the result: an offset sweep ±207 µm
    found no letterforms at any depth (peaks discordant across segments =
    noise, not placement bias), a ten-times-larger Nov-2025-generation
-   segment read *quieter* still (0.2 %), and the first budget-adequate probe
+   segment read *quieter* still (0.22 %), and the first budget-adequate probe
    of PHerc 1218/0800/0268 (six ~47 cm² segments) returned 0.08–0.34 % —
-   below every 1447 value. **Every scroll of the 8.64 µm batch is silent
+   below every Exp 6–7 1447 value (0.5–2.5 %), bracketing that quiet Nov
+   segment. **Every scroll of the 8.64 µm batch is silent
    under a validated model with a passing positive control, and response
    decreases as surface quality improves.** The published `layers_ink`
    predictions shipped with the segments also show no letterforms, so no
@@ -248,8 +265,8 @@ Work after the ladder materially refines conclusions 3–4 above.
    scanning team, not for model builders).
 4. **Ink density families (exploratory, cause unproven).** Cohen's d of
    ink-vs-background intensity splits the corpus into a carbon-like family
-   (Paris + PHerc 51, |d| ≤ 0.1) and a denser-ink family (1667/343P/500P2,
-   d ≥ +0.19) that tracks the transfer clusters — but beam energy is
+   (Paris + PHerc 51 — no positive contrast, per-fragment d −0.18…+0.06) and
+   a denser-ink family (1667/343P/500P2, d ≥ +0.19) that tracks the transfer clusters — but beam energy is
    confounded per fragment, so we report a density-contrast difference of
    unproven cause, gated on a PHerc 51 multi-energy sweep.
 
@@ -275,7 +292,7 @@ to anyone rendering self-grown segments:
 
 The scan team's published Oct-2025 1203 segments pass both checks — figures
 `fig5`/`fig6` show the failure and the pass side by side. Figures for all
-headline results are in `docs/figures/`.
+headline results are in `figures/`.
 
 ## Recommended next steps (ours and anyone's)
 
@@ -305,7 +322,8 @@ headline results are in `docs/figures/`.
 3. koine-machines gotchas documented for reproducers: patch-cache invalidation
    after dataset changes, `decoder_upscale` needed for resnet3d in flat-mode
    training (one-line patch included), HF `resnet50_7.9um_scroll1_frags`
-   state-dict is drop-in compatible with `ResNet3DSegmentationModel`.
+   state-dict is drop-in compatible with `ResNet3DSegmentationModel`
+   (`scripts/wrap_hf_resnet.py` wraps it into the koine checkpoint envelope).
 
 ## Reproducibility
 

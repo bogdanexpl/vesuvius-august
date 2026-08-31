@@ -3,7 +3,7 @@
 # For each scroll group: train flat 64-ch vesuvius_unet on all OTHER groups
 # (5k iters), then predict every fragment of the held-out group and score.
 set -uo pipefail
-IV=$HOME/code/vesuvius/villa/ink-detection/.venv/bin/python
+IV="${INK_VENV_PY:?set INK_VENV_PY to the villa ink-detection venv python (see README prerequisites)}"
 ROOT=/data/vesuvius/ink-dataset/frags
 RUNS=/data/vesuvius/runs/exp4_loso
 SCROLLS=$(ls "$ROOT" | sed 's/__.*//' | sort -u)

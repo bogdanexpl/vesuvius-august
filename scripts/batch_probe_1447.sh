@@ -7,8 +7,8 @@ V="https://vesuvius-challenge-open-data.s3.us-east-1.amazonaws.com/PHerc1447/vol
 CKPT=/data/vesuvius/runs/ink_sim86_resnet_ft/ckpt_005000.pth
 SV=/data/vesuvius/PHerc1447/surface-volumes
 OUT=/data/vesuvius/runs/1447_probe/batch
-IV=$HOME/code/vesuvius/villa/ink-detection/.venv/bin/python
-PACK=$HOME/code/vesuvius/scripts/tifs_to_zarr.py
+IV="${INK_VENV_PY:?set INK_VENV_PY to the villa ink-detection venv python (see README prerequisites)}"
+PACK="$(dirname "$0")/tifs_to_zarr.py"
 mkdir -p "$OUT" "$SV" /data/vesuvius/PHerc1447/vc-cache/dummy
 
 for SEGDIR in /data/vesuvius/PHerc1447/segments/raw/auto_grown_*; do

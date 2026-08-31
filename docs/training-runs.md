@@ -23,6 +23,7 @@ to select on, and doing so would manufacture the result.
 | **Data** | Scroll 1 (PHerc. Paris 4) ink tutorial dataset, segment w00, 2.4 µm, labels on one z-plane |
 | **Model** | `vesuvius_unet`, patch 64×256×256, batch 2, LR 0.01, from scratch |
 | **Schedule** | 20 000 iterations, checkpoint every 1 000 |
+| **Config** | `configs/ink_tutorial.json` |
 | **Wall time** | 3 h 07 m training, 53 min full-segment inference |
 | **Checkpoint** | `ckpt_020000` — **final**. Verified by reading legible Greek rows on w00 before being used as the anchor for rungs 1–2 |
 
@@ -34,6 +35,7 @@ to select on, and doing so would manufacture the result.
 | **Data** | Scroll 1 tutorial data degraded to 8.6 µm-equivalent (3.6× in-plane, 65→18 z), built by `downsample_to_sim86.py` |
 | **Model** | `resnet3d`, patch 18×256×256, batch 8, LR 5e-4, initialised from the public `resnet50_7.9um_scroll1_frags` weights wrapped into koine format |
 | **Schedule** | 5 000 iterations, checkpoint every 1 000 |
+| **Config** | `configs/ink_sim86_resnet_ft.json` |
 | **Wall time** | 20 m 20 s |
 | **Checkpoint** | `ckpt_005000` — **final**. Used for rungs 4, 5, 6a, 6b |
 
@@ -48,6 +50,7 @@ is cheap, and 20 minutes was enough to read text the model had never seen.
 | **Data** | Rung-4 corpus rebuilt with 3D gaussian PSF blur and a quantile LUT toward measured eligible-render statistics (`build_sim86v2.py`) |
 | **Model** | `resnet3d`, patch 18×256×256, batch 8, LR 3e-4, initialised from the rung-4 checkpoint |
 | **Schedule** | 5 000 iterations, checkpoint every 1 000 |
+| **Config** | `configs/ink_sim86v2_resnet_ft.json` |
 | **Wall time** | ~20 m |
 | **Checkpoint** | `ckpt_005000` — **final**. Used for rungs 7, 8, 9 |
 
@@ -73,7 +76,7 @@ scored on a held-out scroll's fragment with `exp4_score.py`.
 are only meaningful if the schedule is the variable, so no fold's checkpoint
 was chosen by inspection.
 
-Roughly 20 GPU-hours across this experiment. The scaling curve is read
+Roughly 25 GPU-hours across this experiment. The scaling curve is read
 across runs, not within one: 714, 1 250, 2 143, 3 750 and 7 500 iterations
 per training fragment come from combining schedule length with corpus size.
 

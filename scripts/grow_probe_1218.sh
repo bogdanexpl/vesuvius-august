@@ -2,8 +2,8 @@
 set -uo pipefail
 V="https://vesuvius-challenge-open-data.s3.us-east-1.amazonaws.com/PHerc1218/volumes/20250521120456-8.640um-1.2m-116keV-masked.zarr"
 CKPT=/data/vesuvius/runs/ink_sim86v2_resnet_ft/ckpt_005000.pth
-IV=$HOME/code/vesuvius/villa/ink-detection/.venv/bin/python
-PACK=$HOME/code/vesuvius/scripts/tifs_to_zarr.py
+IV="${INK_VENV_PY:?set INK_VENV_PY to the villa ink-detection venv python (see README prerequisites)}"
+PACK="$(dirname "$0")/tifs_to_zarr.py"
 for S in 5112,3216,11200 2216,4232,11200 4184,5280,11200 5776,3264,11800 1744,4184,11800 4592,5200,11800 2784,3344,12400 5848,4296,12400 5904,5312,12400; do
   AVAIL=$(df --output=avail -BG /data | tail -1 | tr -dc 0-9)
   [ "$AVAIL" -lt 6 ] && { echo "STOP disk ${AVAIL}G"; break; }

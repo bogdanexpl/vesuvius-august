@@ -6,8 +6,8 @@ set -uo pipefail
 SCROLL=$1; VOLNAME=$2; BAND=$3; shift 3
 V="https://vesuvius-challenge-open-data.s3.us-east-1.amazonaws.com/$SCROLL/volumes/$VOLNAME"
 CKPT=/data/vesuvius/runs/ink_sim86v2_resnet_ft/ckpt_005000.pth
-IV=$HOME/code/vesuvius/villa/ink-detection/.venv/bin/python
-PACK=$HOME/code/vesuvius/scripts/tifs_to_zarr.py
+IV="${INK_VENV_PY:?set INK_VENV_PY to the villa ink-detection venv python (see README prerequisites)}"
+PACK="$(dirname "$0")/tifs_to_zarr.py"
 ROOT=/data/vesuvius/$SCROLL
 mkdir -p "$ROOT/paths" "$ROOT/vc-cache/dummy" "/data/vesuvius/runs/${SCROLL}_probe"
 [ -f "$ROOT/seed_params.json" ] || cat > "$ROOT/seed_params.json" <<EOF

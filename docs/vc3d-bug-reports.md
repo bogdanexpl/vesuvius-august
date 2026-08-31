@@ -92,23 +92,35 @@ TIFFs to zarr out-of-band.*
 
 ---
 
-## 3. koine `disk_cache._evict()` crashes on concurrent worker eviction
+## 3. koine `disk_cache._evict()` eviction race (pre-port module; current main appears guarded)
 
-**Summary.** `koine_machines/common/disk_cache.py` `_evict()` calls
-`entry.stat()` on a scandir snapshot; with multiple dataloader workers each
-holding their own cache store over the same `--cache-dir`, a sibling worker
-can evict a file between scandir and stat → `FileNotFoundError` kills the
-whole `infer_full3d_tifxyz` run (observed ~2 h into a 7 h inference).
+**Summary.** In the `koine_machines` ink-detection vintage (our checkout:
+villa `4b8694ab`, 2026-07-13), `koine_machines/common/disk_cache.py`
+`_evict()` calls `entry.stat()` on a scandir snapshot with no guard; with
+multiple dataloader workers each holding their own cache store over the same
+`--cache-dir`, a sibling worker can evict a file between scandir and stat →
+`FileNotFoundError` kills the whole `infer_full3d_tifxyz` run (observed ~2 h
+into a 7 h inference).
 
-**Fix (one-liner class):** wrap the stat in try/except FileNotFoundError and
-skip vanished entries (unlink already uses `missing_ok=True`). Patch applied
-locally and verified; happy to PR.
+**Local fix, verified in production:** wrap the per-entry stat in try/except
+FileNotFoundError and skip vanished entries (unlink already uses
+`missing_ok=True`).
+
+**Upstream state.** The ink-detection pipeline has since been ported into
+`vesuvius/src/vesuvius/ink_detection` (PR #1456, 2026-08-14), and the cache
+implementation there (`volume_io.py`) already carries equivalent guards in
+`_cache_snapshot` / `_evict_to_watermark` — current `main` looks fixed.
+Filed to (a) confirm that artifacts built from the pre-port module (pip
+releases, `:edge` images) pick up the guard, and (b) record the failure mode
+for anyone pinned to a `koine_machines` vintage. Happy to close if (a)
+already holds.
 
 ## 4. `vc_grow_seg_from_seed` produces cross-cutting (non-sheet) surfaces on a coarse binary prediction
 
 **Observed** on PHerc 1203's 2.403 µm scan, whose only published surface
-prediction is `…-surface-m7-L2-th0.2.zarr` — binary (all nonzero voxels are
-exactly 255) at quarter resolution (L2, 9.6 µm effective), on a heavily
+prediction is the `…-surface-m7-L2-th0.2.zarr` representation under
+`PHerc1203/representations/predictions/surfaces/` on the data server —
+binary (all nonzero voxels are exactly 255) at quarter resolution (L2, 9.6 µm effective), on a heavily
 compressed scroll where that mask visually fuses adjacent sheets.
 
 **Symptom.** Growth completes normally (plausible area, generations, meta),
@@ -135,4 +147,7 @@ fraction and refuse/warn below a threshold; (b) document that L2-scale
 predictions on compressed scrolls are not valid growth targets. A cheap
 downstream detector for already-grown surfaces: render the mid-layer and
 check the in-segment dark-gap fraction (winding cross-sections show ~10–13 %
-dark inter-sheet gaps vs ~1.5 % for true sheets in our data).
+dark inter-sheet gaps vs ~1.5 % for true sheets in our data). That detector
+is packaged as a standalone tool, `scripts/validate_surface.py` in
+https://github.com/bogdanexpl/vesuvius-august, which flags a bad surface in
+seconds from its rendered layers.

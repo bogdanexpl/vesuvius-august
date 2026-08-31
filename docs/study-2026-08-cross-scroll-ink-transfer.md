@@ -6,7 +6,7 @@ density families, the budget-adequate PHerc 1447 probe, and the pre-registered
 surface-placement experiment). Single-investigator study on one RTX A6000
 (48 GB), all data streamed from the Vesuvius Challenge open-data S3 bucket.
 Experiment log with timestamps and dead ends: `DESIGN.md` (working repository, not mirrored here); condensed
-prize-submission version: `docs/aug2026-progress-submission.md`.*
+prize-submission version: the repository `README.md`.*
 
 ---
 
@@ -21,15 +21,16 @@ resolution, acquisition physics, pipeline artifacts, or scroll identity
 blocker — a 20-minute fine-tune on resolution-degraded labeled data reads
 simulated 8.6 µm text, generalizing well outside its supervision mask;
 (ii) the same cheaply fine-tuned model transfers to a **real** 7.9 µm
-acquisition of the same scroll, zero-shot; (iii) despite this, 50 segments
-sampled across four 8.64 µm-batch scrolls yield no letterforms; and (iv) in
+acquisition of the same scroll, zero-shot; (iii) despite this, 60 segments
+across four 8.64 µm-batch scrolls (46 self-grown + all 14 published
+PHerc 1447 segments) yield no letterforms; and (iv) in
 the decisive control, PHerc 1203 — which uniquely has a native 2.4 µm scan
 under the same protocol as the reference training data — is equally silent.
 We conclude that **cross-scroll domain shift dominates all other factors**,
 turning the community's open problem §7 ("models fail across scrolls") from
 an observation into a controlled result. We release the full headless
 pipeline (segment growing, streamed rendering, probing at ~10 min/segment)
-plus two reproducible upstream VC3D bug reports.
+plus four reproducible upstream VC3D bug reports.
 
 ## 1. Motivation
 
@@ -91,7 +92,7 @@ re-verified at every model change ("does it still read Scroll 1 text?").
 | 6b | segment coverage | all 14 published 1447 segments | uniform honeycomb false positives, no letters |
 | 7 | acquisition statistics | measured real-vs-sim gap (2.3× high-freq energy, histogram shift); rebuilt sim with PSF blur + quantile LUT; re-fine-tuned | sim sanity holds; real 1447 unchanged — 2nd-order matching insufficient |
 | 8 | **sim→real, same scroll** | rung-7 model on the real 7.9 µm scan of the same Scroll 1 segment | **reads the same Greek rows** — recipe transfers to real acquisitions |
-| 9 | scroll coverage | 46 self-grown segments over 1447/1218/0800/0268, 6 z-bands, inner→outer windings | uniformly quiet near-zero (0.3–1.1 % strong activations), no letters |
+| 9 | scroll coverage | 46 self-grown segments over 1218/0800/0268 (five z-bands, inner→outer windings) + the 14 published 1447 segments (rung 6b) | uniformly quiet near-zero (0.3–1.1 % strong activations), no letters |
 | 10 | **scroll identity, controlled** | proven 2.4 µm model on PHerc 1203's native 2.4 µm scan (protocol matched to training) | noise; row-pitch statistics inconsistent — **cross-scroll transfer fails with resolution AND protocol held equal** |
 
 ## 4. Results
@@ -102,8 +103,9 @@ re-verified at every model change ("does it still read Scroll 1 text?").
    supervision — generalization, not memorization.
 2. **The recipe survives sim-to-real.** Rung 8: the same fine-tuned model
    reads the *real* 7.9 µm acquisition of the same scroll zero-shot.
-3. **The eligible batch is silent anyway.** Rung 9: 50 total segments across
-   four 8.64 µm scrolls produce no letterforms; responses are *quieter* on
+3. **The eligible batch is silent anyway.** Rungs 6b+9: 60 total segments across
+   four 8.64 µm scrolls (14 published 1447 + 46 self-grown) produce no
+   letterforms; responses are *quieter* on
    clean sheets (1218/0800/0268) than on 1447 (fold-textured), indicating the
    model discriminates surface quality rather than hallucinating.
 4. **Scroll identity is the master variable.** Rung 10: 1203's native 2.4 µm
@@ -116,7 +118,7 @@ re-verified at every model change ("does it still read Scroll 1 text?").
 
 ## 5. Threats to validity
 
-- *Sampling:* 50+4 segments across 5 scrolls, but bands are sparse; blank
+- *Sampling:* 60+4 segments across 5 scrolls, but bands are sparse; blank
   regions (margins, inner windings) could contribute to individual negatives
   — not plausibly to all of them.
 - *Model family:* both reference models descend from Scroll 1 training; a
@@ -277,8 +279,8 @@ probes of rungs 5–9 were therefore not decisive; the decisive probe needs
 Cohen's d of ink-labeled vs background voxel intensity (best layer, inside
 the supervision mask; `scripts/exp5_ink_contrast.py`): paris1 −0.103/+0.063,
 paris2 −0.183/+0.048, pherc51 −0.099 | 1667 **+0.268**, 343P **+0.428**,
-500P2 **+0.195**. Two families: carbon-like (|d| ≤ 0.1: Paris + PHerc 51) and
-denser-ink (d ≥ +0.19: 1667/343P/500P2). The tight transfer cluster
+500P2 **+0.195**. Two families: carbon-like (no positive contrast, per-fragment d
+−0.18…+0.06: Paris + PHerc 51) and denser-ink (d ≥ +0.19: 1667/343P/500P2). The tight transfer cluster
 paris1↔pherc51 (§7) shares a near-identical signature; the isolated node 1667
 sits in the other family. The correlation with transfer (r = −0.651, n = 6)
 is entirely driven by 1667 — this explains the outlier, not a general law.
@@ -299,7 +301,7 @@ worst transfer target.
 
 **Setup.** Training corpus `frags_sim86`: 7 fragments / 5 scrolls degraded to
 8.64 µm in-plane (area-mode; ink fractions preserved exactly;
-`scripts/exp6_build_sim86_corpus.py`; 500P2 excluded — OOM, §Appendix A).
+`scripts/exp6_build_sim86_corpus.py`; 500P2 excluded — OOM, see `training-runs.md`).
 Target renders: 3 published 1447 segments re-rendered at `--slice-step 0.375`
 so both domains sit at xy 8.64 µm / z 3.24 µm. Training: 52.5k iterations
 (8h09m) — nominally 7500 it/frag, the §9.3 operating point. *Disclosed
@@ -436,8 +438,9 @@ scope note for the record: the sweep tests *rigid* placement error only —
 an undulating error with amplitude comparable to the sheet spacing defeats
 every fixed offset simultaneously. We judged that acceptable in advance
 (P3 explicitly names it) rather than discovering it afterwards. Cost:
-~4 h wall, ~6 GB disk, 19 inference runs — the cheapest experiment in the
-campaign per hypothesis killed.
+~4 h wall, ~6 GB disk, 19 inference runs of the 27 budgeted (the
+Nov-generation segment ran only the centred window) — the cheapest
+experiment in the campaign per hypothesis killed.
 
 ## 13. Exp 8 — pre-registered 2026-08-25, before execution: is the budget-adequate negative 1447-specific or batch-wide?
 
@@ -498,7 +501,8 @@ frac of rendered pixels > 200 (ckpt_045000; two ~47 cm² segments per scroll):
 | PHerc 0800 | .0016 | .0015 |
 | PHerc 0268 | .0034 | .0020 |
 
-All six are *below* every 1447 value from Exps 6–7 (0.5–2.5 %), and far below
+All six are *below* every 1447 value from Exps 6–7 (0.5–2.5 %) — bracketing
+the quieter Nov-generation segment (0.22 %) — and far below
 the positive-control level (4.6 % with letterforms). Letterform sheets of the
 loudest segment per scroll: sparse speckle following fiber/fold contours,
 plus render-stripe artifacts on 1218 — no closed loops, no stroke-width
@@ -630,7 +634,7 @@ Consequences, recorded per protocol:
    scan (24.5k chunks, ~5 GB effective) is being pulled so regrowth has
    complete prediction support; new segments will be validated by a fast
    cropped render + face-on check *before* full renders and inference. The
-   scan team's own Sept-2025 published segments (9.36 µm frame) were also
+   scan team's own Oct-2025 published segments (9.36 µm frame) were also
    located as a second path.
 
 ## 15. Exp 10 — pre-registered 2026-08-27, before execution: corpus widening with in-scroll labels
@@ -677,4 +681,5 @@ in-scroll data's gain.
 - Rung-9 sheets: `runs/PHerc1218_probe/contact_sheet.png`, `PHerc0800…`,
   `PHerc0268…`.
 - Rung-10: `runs/PHerc1203_24um_probe/*_stretched.png`.
-- All viewable at `the runs/ directory of the data volume`.
+- `runs/` paths refer to the experiment machine's data volume and are not
+  mirrored in this repository; the headline images are in `figures/`.
