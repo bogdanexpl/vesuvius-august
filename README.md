@@ -1,15 +1,100 @@
-# Ink at 8.6 µm: transfer diagnostics, a cross-scroll benchmark, and the budget confound
+# Ink detection at production scan resolution: a benchmark, a scaling law, and a validated diagnosis
 
-*Vesuvius Challenge progress submission, August 2026. Experiments index: [docs/experiments-index.md](docs/experiments-index.md). Full study: [docs/study-2026-08-cross-scroll-ink-transfer.md](docs/study-2026-08-cross-scroll-ink-transfer.md). Upstream bug reports: [docs/vc3d-bug-reports.md](docs/vc3d-bug-reports.md). Figures: [figures/](figures/).*
+*Vesuvius Challenge progress submission, August 2026. MIT licensed. All
+experiments on one RTX A6000, all data from the public open-data bucket.*
 
-# Ink at 8.6 µm: a transfer-diagnostics ladder on PHerc. 1447
+**What this contributes, in order of usefulness to someone reading scrolls:**
 
-*Progress-prize submission draft — August 2026 (revised 2026-08-25: adds the
-LOSO benchmark, the training-budget scaling result that re-scopes the ladder's
-conclusion, and the budget-adequate 1447 probe). Code: this repo (`scripts/`,
-`configs/`). All experiments on one RTX A6000 (48 GB), data streamed from the
-open-data S3 bucket. Full PhD-style report:
-`docs/study-2026-08-cross-scroll-ink-transfer.md`.*
+1. **Cross-scroll ink detection improved from AUC 0.62 to 0.868 on the public
+   fragment data** — no new labels, no new architecture, just training past
+   the point everyone (ourselves included) had stopped. The gain is
+   log-linear at +0.101 AUC per doubling of per-fragment exposure and was
+   still climbing when we ran out of schedule. Every published cross-scroll
+   number, ours included, is a lower bound set by budget rather than by ink
+   chemistry. See [the scaling law](#figures) and
+   [training-runs.md](docs/training-runs.md).
+2. **The first public cross-scroll ink benchmark** — leave-one-scroll-out
+   folds and a 4x4 transfer matrix over 8 IR-labeled fragments from 6
+   physical scrolls, with a reproducible corpus builder, so this axis can be
+   measured rather than asserted.
+3. **A surface-validation tool that catches a silent, results-destroying
+   failure** — `scripts/validate_surface.py`. Segments that cut across
+   windings render as plausible fibrous texture and make ink models emit
+   confident noise. This separates them from real sheet surfaces by ~8x on a
+   single number, in seconds, before you spend GPU time. It cost us three
+   probe results to learn; it costs you one command.
+4. **A controlled diagnosis of the 8.64 µm eligible batch** — every scroll of
+   it silent under a budget-adequate model that carries passing positive
+   controls, with surface error, segmentation generation, training budget and
+   image-space acquisition statistics each excluded by experiment. This is
+   the "no signal versus signal present but unrecovered" diagnostic the
+   2026 open-problems post asked for, resolved to a batch-level cause.
+5. **Four upstream bug reports**, two with working patches — including two
+   silent failures that produce plausible-looking garbage rather than errors.
+   [docs/vc3d-bug-reports.md](docs/vc3d-bug-reports.md).
+
+## Quickstart
+
+Everything runs headless against the public bucket; no GUI, no cluster.
+
+```bash
+git clone https://github.com/bogdanexpl/vesuvius-august && cd vesuvius-august
+pip install numpy zarr tifffile pillow          # scoring + validation tools
+```
+
+**Check whether a segment is usable before spending GPU time on it** — the
+one command most likely to save you a day:
+
+```bash
+# a rendered surface volume, or a directory of layer TIFFs from vc_render_tifxyz
+python scripts/validate_surface.py /data/scroll/surface-volumes/*/ --png check.png
+# PASS  auto_grown_20251005230830031: dark-gap 0.013  (65 layers, 5.8 MP rendered)
+# FAIL  auto_grown_20260827171030809: dark-gap 0.127  <- looks like a winding cross-section
+```
+
+It exits non-zero if anything failed, so it drops straight into a pipeline:
+
+```bash
+python scripts/validate_surface.py "$SEG/vol.zarr" --quiet || { echo "skipping $SEG"; continue; }
+```
+
+**Rebuild the benchmark corpus** (public fragments, ~16 GB):
+
+```bash
+python scripts/exp4_fetch_frags.py          # fetches + packs 8 fragments, 6 scrolls
+bash   scripts/exp4_loso.sh                 # leave-one-scroll-out folds
+python scripts/exp4_score.py                # mask-restricted AUC and Dice per fold
+```
+
+**Reproduce the resolution result** (the 20-minute fine-tune that reads
+simulated 8.6 µm text):
+
+```bash
+python scripts/downsample_to_sim86.py       # degrade labeled 2.4 µm data
+# train with configs/ink_sim86_resnet_ft.json, then:
+python scripts/letterform_sheet.py pred.tif out --um-per-px 8.64
+```
+
+**Probe a scroll segment end to end** — grow, render, pack, infer:
+
+```bash
+python scripts/pull_band.py <zarr-prefix> <dst> <z0> <z1>   # sparse band pull
+python scripts/pick_seeds.py <band.zarr> <z...>             # radial-tier seeds
+bash   scripts/grow_probe_sweep.sh <scroll> <volume> <band> <seeds...>
+```
+
+## Technical integration
+
+- **Inputs:** OME-Zarr / Zarr volumes (streamed by URL or local), `tifxyz`
+  quadmesh segmentations, and the layer-TIFF stacks `vc_render_tifxyz`
+  produces. `validate_surface.py` accepts either a packed zarr or a raw
+  layer directory.
+- **Outputs:** uint8 prediction TIFFs in the input's frame, JSON score files,
+  and PNG contact sheets. Nothing writes back into its input.
+- **Modularity:** each stage is a separate script communicating through files
+  in these formats, so any stage can be replaced — our renders work with
+  other people's models and vice versa. The validation gate in particular is
+  a pure function of a rendered volume and depends on nothing else here.
 
 ## Why
 
