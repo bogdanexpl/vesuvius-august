@@ -322,8 +322,9 @@ headline results are in `figures/`.
 3. koine-machines gotchas documented for reproducers: patch-cache invalidation
    after dataset changes, `decoder_upscale` needed for resnet3d in flat-mode
    training (one-line patch included), HF `resnet50_7.9um_scroll1_frags`
-   state-dict is drop-in compatible with `ResNet3DSegmentationModel`
-   (`scripts/wrap_hf_resnet.py` wraps it into the koine checkpoint envelope).
+   state-dict is drop-in compatible with `ResNet3DSegmentationModel` —
+   wrapping is just saving it as `{"model": state_dict}` with the unused
+   1139-class `fc` head dropped (the loaders use `strict=False`).
 
 ## Reproducibility
 
