@@ -3,6 +3,8 @@
 Every experiment in the campaign, in order, with outcome. Full detail:
 `docs/study-2026-08-cross-scroll-ink-transfer.md` (sections noted);
 day-by-day log with dead ends in the main repository's `DESIGN.md`.
+Per-model training details — schedule, wall time, checkpoint choice — are in
+`training-runs.md`.
 
 ## The ladder (study §3) — which factor blocks ink recovery at 8.6 µm?
 
