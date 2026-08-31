@@ -42,11 +42,46 @@ for two upstream bugs found on the way).
 | 9 | rung-7 model, zero-shot | **46 self-grown segments across three 8.64 µm scrolls** (PHerc 1447 published + our own headless `vc_grow_seg_from_seed` segments on 1447/1218/0800/0268; multiple z-bands, inner/mid/outer windings) | uniformly quiet near-zero predictions (0.3–1.1 % strong activations, edge artifacts only), zero letterforms anywhere |
 | 10 | **the decisive control** — proven 2.4 µm Scroll-1 model, zero-shot | **PHerc 1203 at its native 2.4 µm scan** (same protocol class as the training scan; 4 self-grown segments) | tile-level noise, no letterforms; row-pitch statistics inconsistent across segments (blob noise, not lines). **Cross-scroll transfer fails even with resolution and protocol held equal.** |
 
-Key images (in `runs/` of the data volume):
-`ink_sim86_resnet_ft/predictions/overview_div6.png` (rung-4 Greek),
-`.../overlay_mask_div6.png` (red = the only trained regions),
-`1447_probe/batch/contact_sheet.png` (rung-6b, all segments),
-`1447_probe/offset_sweep/sweep_sheet.png` (rung-6a).
+Every result below has an image behind it; see **Figures**.
+
+## Figures
+
+In the order the argument runs, all in [`figures/`](figures/).
+
+**The positives — what a successful read looks like in this pipeline**
+
+| figure | shows |
+|---|---|
+| [fig9 — rung 4, generalization](figures/fig9_rung4_generalization.png) | The most important image here. White is ink the model recovered from simulated-8.64 µm data; red marks the only regions it was ever trained on. Most of the legible Greek sits outside the red — 78 % of it — so the model learned to read at this resolution rather than memorising its supervision. |
+| [fig10 — rung 4, the read itself](figures/fig10_rung4_sim86_read.png) | The same prediction without the mask overlay: rows of Greek at 8.6 µm-equivalent sampling, after a 20-minute fine-tune. |
+| [fig11 — rung 8, sim to real](figures/fig11_rung8_real79um_read.png) | The same model, zero-shot on a *real* 7.9 µm scan of that scroll. Noisier, same rows legible — the recipe survives the jump from simulated to real acquisitions. |
+| [fig1 — the calibration bar](figures/fig1_positive_control.png) | Density-picked crops of a true positive: closed loops, consistent stroke width, letters on a baseline. Every negative in this submission is judged against this. |
+| [fig12 — cross-scroll transfer](figures/fig12_benchmark_crossscroll_overlay.png) | A benchmark fold: green is ink recovered on a held-out scroll's fragment by a model that never saw that scroll, red is the fragment surface. This is what the AUC numbers look like as an image. |
+| [fig2 — the model-validation control](figures/fig2_exp6_model_validation.png) | The exact checkpoint used on the eligible scrolls, reading a simulated-8.64 µm PHerc 1667 fragment. Without this the negatives would be unfalsifiable. |
+
+**The negatives — the eligible scrolls under that same validated model**
+
+| figure | shows |
+|---|---|
+| [fig3 — PHerc 1447](figures/fig3_1447_budget_adequate_negative.png) | Densest crops from the budget-adequate probe: speckle, no closed forms, no baseline. |
+| [fig13 — every published 1447 segment](figures/fig13_rung9_1447_all_segments.png) | Contact sheet across the segments: uniform texture, no letterforms anywhere. |
+| [fig14 — the offset sweep's best window](figures/fig14_exp7_offset_peak.png) | The highest-response depth of nine tested from −207 to +207 µm. If the surface were merely offset from the ink layer, letters would appear here. |
+| [fig4 — the rest of the batch](figures/fig4_exp8_best_batch_segment.png) | The loudest of six segments across PHerc 1218, 0800 and 0268 — still speckle. |
+
+**The surface-validity work**
+
+| figure | shows |
+|---|---|
+| [fig5 — the silent failure mode](figures/fig5_crosssection_failure_mode.png) | Five render depths of a self-grown surface plus its prediction. Every depth shows winding cross-sections, not a sheet: the grower produced geometry that renders plausibly and means nothing. |
+| [fig6 — what valid surfaces look like](figures/fig6_faceon_valid_surfaces.png) | Face-on crops of scan-team-published segments: continuous woven fibre. The dark-gap fraction separates these from cross-sections by about 8×. |
+
+**Addendum figures (results that landed after this write-up was frozen)**
+
+| figure | shows |
+|---|---|
+| [fig7 — Scroll 5 validation](figures/fig7_scroll5_validation.png) | Our read of a real, read, held-out scroll (top) beside the community's prediction of the same segment (bottom). |
+| [fig8 — the same region, zoomed](figures/fig8_scroll5_zoom_pair.png) | 3 × 2 cm from both predictions for direct comparison. |
+
 
 ## What this establishes
 
