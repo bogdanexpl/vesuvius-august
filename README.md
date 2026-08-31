@@ -191,6 +191,12 @@ headline results are in `docs/figures/`.
 - `scripts/downsample_to_sim86.py` — simulated-8.6 µm dataset builder
 - `scripts/infer_resnet_legacy.py` — GP-era-normalization inference driver
 - `configs/ink_sim86_resnet_ft.json` — the 20-minute fine-tune
+- **Training runs — one table per model** (question served, data, architecture,
+  schedule, wall time, checkpoint used and why it was chosen):
+  [docs/training-runs.md](docs/training-runs.md). Checkpoint selection was
+  either *final* or, in the one case where a save-interval mistake left no
+  final checkpoint, *last surviving* — never chosen by scoring candidates
+  against a target.
 - Full experiment log with dates and dead ends: `DESIGN.md` in the working repository (not mirrored here; this repository carries the submission and its reproduction path only)
 
 ## Addendum (2026-08-31): two results that landed after this write-up was frozen
