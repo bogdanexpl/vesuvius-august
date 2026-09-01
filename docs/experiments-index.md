@@ -29,7 +29,7 @@ Per-model training details — schedule, wall time, checkpoint choice — are in
 | 1 | 3D-DINO probe | community 8-scroll direct-3D ink model on a 1203 2.4 µm region | fiber false-positives, no letters; projection caveat |
 | 2 | DINO ink-likeness | ViT feature similarity to known ink | **invalid** — state-dict mis-load, positive control failed; redo checklist recorded |
 | 3 | fragment inventory | which physical scrolls have public IR-verified ink labels | ≥7 scrolls; enabled Exp 4 |
-| 4 | LOSO benchmark (§7, §9) | first cross-scroll ink benchmark: leave-one-scroll-out + 4×4 pairwise; then budget 2×2, scaling curve, matched ceilings | AUC monotone in it/frag (r=.98), +0.101/doubling unsaturated; matched penalty −0.02…−0.04 |
+| 4 | LOSO benchmark (§7, §9) | first (to our knowledge) cross-scroll ink benchmark: leave-one-scroll-out + 4×4 pairwise; then budget 2×2, scaling curve, matched ceilings | AUC monotone in it/frag (r=.98), +0.101/doubling unsaturated; matched penalty −0.02…−0.04 |
 | 5 | ink density families (§10) | Cohen's d of ink vs background intensity per fragment | two families tracking transfer clusters; beam-energy confound stated — later excluded by the PHerc 51 multi-energy control (Exp 13) |
 | 6 | budget-adequate 1447 probe (§11) | 5-scroll sim-8.64 model at the scaling operating point on depth-matched 1447 renders | negative with passing positive control |
 | 7 | surface-placement test (§12) | pre-registered offset sweep ±207 µm + Nov-2025 segmentation generation | P3: both surface hypotheses rejected; chemistry promoted |

@@ -17,7 +17,8 @@ experiments on one RTX A6000, all data from the public open-data bucket.*
    number, ours included, is a lower bound set by budget rather than by ink
    chemistry. See [the scaling law](#figures) and
    [training-runs.md](docs/training-runs.md).
-2. **The first public cross-scroll ink benchmark** — leave-one-scroll-out
+2. **To our knowledge the first public cross-scroll ink benchmark** —
+   leave-one-scroll-out
    folds and a 4x4 transfer matrix over 8 IR-labeled fragments from 6
    physical scrolls, with a reproducible corpus builder, so this axis can be
    measured rather than asserted.
