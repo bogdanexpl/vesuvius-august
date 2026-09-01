@@ -5,12 +5,13 @@ experiments on one RTX A6000, all data from the public open-data bucket.*
 
 **What this contributes, in order of usefulness to someone reading scrolls:**
 
-1. **Cross-scroll ink detection improved from AUC 0.62 to 0.868 on the public
-   fragment data** (0.62 = our own six-fold LOSO macro average at
-   community-practice budgets; 0.868 = best held-out fragment after scaling;
-   like-for-like on that same fragment: 0.61 → 0.868) — no new labels, no
-   new architecture, just training past the point everyone (ourselves
-   included) had stopped. The gain is
+1. **Held-out cross-scroll ink detection is log-linear in training budget:
+   the fold we scaled rose from AUC 0.61 to 0.868 on the public fragment
+   data** (corroborated at 0.857 by its second held-out fragment; the
+   six-fold LOSO macro at community-practice budgets is 0.62 — our own
+   measurement, as no prior public number exists) — no new labels, no new
+   architecture, just training past the point everyone (ourselves included)
+   had stopped. The gain is
    log-linear at +0.101 AUC per doubling of per-fragment exposure and was
    still climbing when we ran out of schedule. Every published cross-scroll
    number, ours included, is a lower bound set by budget rather than by ink
