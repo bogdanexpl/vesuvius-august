@@ -30,9 +30,9 @@ experiments on one RTX A6000, all data from the public open-data bucket.*
 4. **A controlled diagnosis of the 8.64 µm eligible batch** — every scroll of
    it silent under a budget-adequate model that carries passing positive
    controls, with surface error, segmentation generation, training budget and
-   image-space acquisition statistics each excluded by experiment. This is
-   the "no signal versus signal present but unrecovered" diagnostic the
-   2026 open-problems post asked for, resolved to a batch-level cause.
+   image-space acquisition statistics each excluded by experiment. This answers
+   the open-problems post's "what happens if the models don't generalize?"
+   — resolved to a batch-level cause.
 5. **Four upstream bug reports**, one with a working patch and one with a
    validated detector tool — including two silent failures that produce
    plausible-looking garbage rather than errors.
@@ -113,8 +113,8 @@ bash   scripts/grow_probe_sweep.sh <scroll> <volume> <band> <seeds...>
 
 ## Why
 
-The 2026 open-problems post asks for "diagnostics distinguishing *no signal*
-from *signal present but unrecovered*" at production scan resolutions. The 13
+The 2026 open-problems post asks "what happens if the models don't
+generalize?" and lists candidate explanations without deciding among them. The 13
 GP-eligible scrolls were scanned at 8.6/9.4 µm; every public ink model was
 trained at 2.4–7.9 µm, and none has been systematically probed against an
 8.6 µm scroll. We ran that probe as a controlled ladder on PHerc. 1447
