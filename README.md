@@ -460,3 +460,16 @@ third of it. Image sharpness would have to halve again from the eligible
 batch's own value before this pipeline goes silent. What remains, and what
 image-space simulation cannot reach, is ink chemistry outside the classic
 corpus and propagation physics at 1.2 m.
+
+## Filed upstream issues
+
+Three of the four bug reports in [docs/vc3d-bug-reports.md](docs/vc3d-bug-reports.md)
+are filed on ScrollPrize/villa:
+
+- [#1673](https://github.com/ScrollPrize/villa/issues/1673) — `vc_render_tifxyz --zarr-output` segfaults deterministically
+- [#1674](https://github.com/ScrollPrize/villa/issues/1674) — local zarr volumes silently render as fill-value (wrong chunk keys)
+- [#1675](https://github.com/ScrollPrize/villa/issues/1675) — `vc_grow_seg_from_seed` produces cross-cutting surfaces on a coarse binary prediction (with `validate_surface.py` as the downstream detector)
+
+The fourth (a dataloader cache-eviction race) was not filed: current upstream
+`main` already carries the equivalent guard, and the shipped-image staleness
+it would raise is already tracked in villa #1588.
