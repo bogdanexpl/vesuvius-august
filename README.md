@@ -350,7 +350,7 @@ headline results are in `figures/`.
   space (phase-contrast fringes, correlated reconstruction noise) before
   re-running the transfer test. If transfer then works, pseudo-labeling on
   1447 unlocks.
-- **Multi-scroll co-training** (the organizers' named ask) — done above
+- **Multi-scroll co-training** — done above
   (revision §3); the open follow-ups are surface-quality verification on the
   eligible scrolls and widening the labeled-chemistry span beyond 6 scrolls.
 - **Train longer.** The single cheapest community lever: the scaling curve is

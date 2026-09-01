@@ -37,9 +37,10 @@ plus four reproducible upstream VC3D bug reports.
 
 - The 2027 Grand Prize and all ten First Letters prizes are payable only on
   scrolls scanned at 8.64/9.36 µm. Whether ink is even detectable at those
-  resolutions/protocols was explicitly listed as unproven by the organizers
-  (2026 Open Problems, §6), who requested "diagnostics distinguishing *no
-  signal* from *signal present but unrecovered*".
+  resolutions/protocols is an open question: the 2026 Open Problems post
+  lists candidate explanations for cross-scroll failure — scan signal,
+  surface placement, labels, architecture, chemistry, sub-threshold signal —
+  without deciding among them.
 - Every prior read (Scrolls 1–5) used 2.4–7.9 µm data. No systematic probe of
   the eligible batch existed publicly as of 2026-08.
 - Strategy context (this project): a rigorous answer is progress-prize
@@ -584,7 +585,7 @@ scale inference).
 
 **Decision rules.**
 - **P1:** letterforms on 1203@2.4 µm ⇒ First Letters candidate on an
-  eligible scroll (verify with organizers that letters from the 2.4 µm scan
+  eligible scroll (confirming that letters from the 2.4 µm scan
   of an eligible scroll qualify); unlock the ladder: pseudo-label 1203@2.4 →
   transfer to 1203@9.36 via the proven degradation recipe → probe the
   remaining eight 9.36 scrolls.
