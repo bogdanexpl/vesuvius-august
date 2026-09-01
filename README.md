@@ -213,7 +213,7 @@ In the order the argument runs, all in [`figures/`](figures/).
 ![fig6 — what valid surfaces look like](figures/fig6_faceon_valid_surfaces.png)
 
 
-**Addendum figures (results that landed after this write-up was frozen)**
+**The late-August results**
 
 **fig16 — selection heuristic refuted.** Choosing training data by ink family does not improve transfer: the same-family pair loses on one target and wins on the other, because one set wins both.
 
@@ -386,7 +386,7 @@ headline results are in `figures/`.
   against a target.
 - Full experiment log with dates and dead ends: `DESIGN.md` in the working repository (not mirrored here; this repository carries the submission and its reproduction path only)
 
-## Addendum (2026-08-31): four results from the final days of August, appended without rewriting the frozen sections above
+## Four late-August results
 
 Both belong to the next cycle — nothing above has been revised — but they
 change how the batch negative should be read.
