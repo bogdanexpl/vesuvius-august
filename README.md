@@ -158,6 +158,7 @@ In the order the argument runs, all in [`figures/`](figures/).
 | [fig1 — the calibration bar](figures/fig1_positive_control.png) | Density-picked crops of a true positive: closed loops, consistent stroke width, letters on a baseline. Every negative in this submission is judged against this. |
 | [fig12 — cross-scroll transfer](figures/fig12_benchmark_crossscroll_overlay.png) | A benchmark fold: green is ink recovered on a held-out scroll's fragment by a model that never saw that scroll, red is the fragment surface. This is what the AUC numbers look like as an image. |
 | [fig15 — the scaling law](figures/fig15_budget_scaling_curve.png) | Held-out cross-scroll AUC against training exposure per fragment: log-linear at +0.101 per doubling, still climbing at the largest budget run, and passing the within-scroll model that had less training. |
+| [fig17 — the benchmark as images](figures/fig17_loso_all_targets.png) | Every held-out scroll's prediction beside its IR ground truth at the community-practice budget (AUC 0.48–0.67), and the same Paris 1 fold after scaling (0.868): the spectrum the numbers describe. |
 | [fig2 — the model-validation control](figures/fig2_exp6_model_validation.png) | The exact checkpoint used on the eligible scrolls, reading a simulated-8.64 µm PHerc 1667 fragment. Without this the negatives would be unfalsifiable. |
 
 **The negatives — the eligible scrolls under that same validated model**
@@ -225,8 +226,9 @@ Work after the ladder materially refines conclusions 3–4 above.
    `scripts/exp4_fetch_frags.py`), trained leave-one-scroll-out, plus a full
    4×4 pairwise matrix on the first 4-scroll / 6-fragment corpus. Structure:
    Paris1↔PHerc51 form a tight transfer cluster at ceiling; PHerc 1667 is
-   isolated — near chance in the six-fold LOSO (0.509), weakest matrix node
-   in both directions (0.54–0.63).
+   isolated — 0.51 in the v1 LOSO, 0.58 in the six-fold, weakest matrix node
+   in both directions (0.54–0.63). Every fold's prediction is shown against
+   its IR ground truth in `figures/fig17_loso_all_targets.png`.
 2. **Every cross-scroll number is a training-budget lower bound.** Crossing
    corpus size × budget shows held-out AUC is monotone in *iterations per
    training fragment* (r = +0.98): .548 → .868 from 714 → 7500 it/frag,
