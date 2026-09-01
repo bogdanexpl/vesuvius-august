@@ -273,7 +273,12 @@ Work after the ladder materially refines conclusions 3–4 above.
    Paris1↔PHerc51 form a tight transfer cluster at ceiling; PHerc 1667 is
    isolated — 0.51 in the v1 LOSO, 0.58 in the six-fold, weakest matrix node
    in both directions (0.54–0.63). Every fold's prediction is shown against
-   its IR ground truth in `figures/fig17_loso_all_targets.png`.
+   its IR ground truth in `figures/fig17_loso_all_targets.png`. Nearest prior
+   evaluation artifact we know of: the `ink_9um` dataset's published
+   validation masks — held-out pixels *within* the training scrolls' own
+   segments, with model-assisted labels, used as training-time validation.
+   The distinction here is scroll-level holdout on infrared ground truth
+   with a public protocol and baselines.
 2. **Every cross-scroll number is a training-budget lower bound.** Crossing
    corpus size × budget shows held-out AUC is monotone in *iterations per
    training fragment* (r = +0.98): .548 → .868 from 714 → 7500 it/frag,
