@@ -342,7 +342,16 @@ The scan team's published Oct-2025 1203 segments pass both checks — figures
 `fig5`/`fig6` show the failure and the pass side by side. Figures for all
 headline results are in `figures/`.
 
-## Recommended next steps (ours and anyone's)
+## Next steps
+
+- **Scale the hardest fold (running now).** The law's 0.868 comes from the
+  friendliest fold. The same recipe at the same operating point
+  (7,500 it/frag, 37,500 iterations over the 5 remaining fragments) on the
+  hold-1667 fold — the corpus's weakest target, 0.51–0.58 at low budget —
+  tests whether budget scaling generalizes where transfer is hardest.
+  Either answer sharpens the picture: a large rise says the budget story is
+  corpus-wide; a flat result measures where chemistry genuinely bites.
+  Result lands in the September cycle.
 
 - **Projection-space acquisition simulation**: rung 7 shows image-space
   statistics matching (PSF energy + histogram) is insufficient — the next
