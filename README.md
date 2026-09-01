@@ -461,6 +461,22 @@ batch's own value before this pipeline goes silent. What remains, and what
 image-space simulation cannot reach, is ink chemistry outside the classic
 corpus and propagation physics at 1.2 m.
 
+## Released models
+
+Trained weights for the two headline models are in the
+[models-2026-09-01 release](https://github.com/bogdanexpl/vesuvius-august/releases/tag/models-2026-09-01)
+(koine `vesuvius_unet` flat 64-channel, weights only — load with
+`torch.load(path)["model"]` or a koine config's `checkpoint:` key; SHA-256
+sums attached):
+
+| file | training | held-out score |
+|---|---|---|
+| `exp16_scale60k_vesuvius_unet_weights.pth` | from scratch, 15,000 it/frag on 4 IR-labeled fragments (the scaling curve's ceiling run) | Paris 1: AUC 0.867 (frag 3), 0.864 (frag 4) |
+| `exp6_sim86_probe_vesuvius_unet_weights.pth` | from scratch on 7 fragments / 5 scrolls degraded to simulated 8.64 µm | positive control 4.6 % with letterforms; 0.08–2.5 % on every eligible-scroll segment |
+
+Training data is exclusively public IR-labeled fragment data; MIT like the
+rest of the repository.
+
 ## Filed upstream issues
 
 Three of the four bug reports in [docs/vc3d-bug-reports.md](docs/vc3d-bug-reports.md)
