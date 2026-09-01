@@ -79,6 +79,10 @@ form and flipping `dimension_separator` changes nothing (both layouts present â†
 still zero). The `--remote-url` path renders the identical segment correctly,
 so the segment geometry and volume data are fine.
 
+Related but distinct: #1343 (all-black render at an *absent* pyramid level,
+closed) â€” here level 0 exists and is readable; the probed chunk keys simply
+match no level's grid.
+
 Suspect: axis order / scale mapping in the local `FileSystemChunkSource` (or
 `utils::ZarrArray`) chunk-key computation, possibly missing the OME multiscale
 coordinate transform that the HTTP path applies.
@@ -151,3 +155,7 @@ dark inter-sheet gaps vs ~1.5 % for true sheets in our data). That detector
 is packaged as a standalone tool, `scripts/validate_surface.py` in
 https://github.com/bogdanexpl/vesuvius-august, which flags a bad surface in
 seconds from its rendered layers.
+
+This sits on the compressed-region terrain of #191; the report here is the
+specific tool behavior (silent cross-cutting output) and a detector for it,
+not the general segmentation difficulty.
