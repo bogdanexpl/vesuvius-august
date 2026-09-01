@@ -386,7 +386,7 @@ headline results are in `figures/`.
   against a target.
 - Full experiment log with dates and dead ends: `DESIGN.md` in the working repository (not mirrored here; this repository carries the submission and its reproduction path only)
 
-## Addendum (2026-08-31): two results that landed after this write-up was frozen
+## Addendum (2026-08-31): four results from the final days of August, appended without rewriting the frozen sections above
 
 Both belong to the next cycle — nothing above has been revised — but they
 change how the batch negative should be read.
