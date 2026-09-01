@@ -150,40 +150,83 @@ In the order the argument runs, all in [`figures/`](figures/).
 
 **The positives — what a successful read looks like in this pipeline**
 
-| figure | shows |
-|---|---|
-| [fig9 — rung 4, generalization](figures/fig9_rung4_generalization.png) | The most important image here. White is ink the model recovered from simulated-8.64 µm data; red marks the only regions it was ever trained on. Most of the legible Greek sits outside the red — 78 % of it — so the model learned to read at this resolution rather than memorising its supervision. |
-| [fig10 — rung 4, the read itself](figures/fig10_rung4_sim86_read.png) | The same prediction without the mask overlay: rows of Greek at 8.6 µm-equivalent sampling, after a 20-minute fine-tune. |
-| [fig11 — rung 8, sim to real](figures/fig11_rung8_real79um_read.png) | The same model, zero-shot on a *real* 7.9 µm scan of that scroll. Noisier, same rows legible — the recipe survives the jump from simulated to real acquisitions. |
-| [fig1 — the calibration bar](figures/fig1_positive_control.png) | Density-picked crops of a true positive: closed loops, consistent stroke width, letters on a baseline. Every negative in this submission is judged against this. |
-| [fig12 — cross-scroll transfer](figures/fig12_benchmark_crossscroll_overlay.png) | A benchmark fold: green is ink recovered on a held-out scroll's fragment by a model that never saw that scroll, red is the fragment surface. This is what the AUC numbers look like as an image. |
-| [fig15 — the scaling law](figures/fig15_budget_scaling_curve.png) | Held-out cross-scroll AUC against training exposure per fragment: log-linear at +0.101 per doubling, still climbing at the largest budget run, and passing the within-scroll model that had less training. |
-| [fig17 — the benchmark as images](figures/fig17_loso_all_targets.png) | Every held-out scroll's prediction beside its IR ground truth at the community-practice budget (AUC 0.48–0.67), and the same Paris 1 fold after scaling (0.868): the spectrum the numbers describe. |
-| [fig2 — the model-validation control](figures/fig2_exp6_model_validation.png) | The exact checkpoint used on the eligible scrolls, reading a simulated-8.64 µm PHerc 1667 fragment. Without this the negatives would be unfalsifiable. |
+**fig9 — rung 4, generalization.** The most important image here. White is ink the model recovered from simulated-8.64 µm data; red marks the only regions it was ever trained on. Most of the legible Greek sits outside the red — 78 % of it — so the model learned to read at this resolution rather than memorising its supervision.
+
+![fig9 — rung 4, generalization](figures/fig9_rung4_generalization.png)
+
+**fig10 — rung 4, the read itself.** The same prediction without the mask overlay: rows of Greek at 8.6 µm-equivalent sampling, after a 20-minute fine-tune.
+
+![fig10 — rung 4, the read itself](figures/fig10_rung4_sim86_read.png)
+
+**fig11 — rung 8, sim to real.** The same model, zero-shot on a *real* 7.9 µm scan of that scroll. Noisier, same rows legible — the recipe survives the jump from simulated to real acquisitions.
+
+![fig11 — rung 8, sim to real](figures/fig11_rung8_real79um_read.png)
+
+**fig1 — the calibration bar.** Density-picked crops of a true positive: closed loops, consistent stroke width, letters on a baseline. Every negative in this submission is judged against this.
+
+![fig1 — the calibration bar](figures/fig1_positive_control.png)
+
+**fig12 — cross-scroll transfer.** A benchmark fold: green is ink recovered on a held-out scroll's fragment by a model that never saw that scroll, red is the fragment surface. This is what the AUC numbers look like as an image.
+
+![fig12 — cross-scroll transfer](figures/fig12_benchmark_crossscroll_overlay.png)
+
+**fig15 — the scaling law.** Held-out cross-scroll AUC against training exposure per fragment: log-linear at +0.101 per doubling, still climbing at the largest budget run, and passing the within-scroll model that had less training.
+
+![fig15 — the scaling law](figures/fig15_budget_scaling_curve.png)
+
+**fig17 — the benchmark as images.** Every held-out scroll's prediction beside its IR ground truth at the community-practice budget (AUC 0.48–0.67), and the same Paris 1 fold after scaling (0.868): the spectrum the numbers describe.
+
+![fig17 — the benchmark as images](figures/fig17_loso_all_targets.png)
+
+**fig2 — the model-validation control.** The exact checkpoint used on the eligible scrolls, reading a simulated-8.64 µm PHerc 1667 fragment. Without this the negatives would be unfalsifiable.
+
+![fig2 — the model-validation control](figures/fig2_exp6_model_validation.png)
+
 
 **The negatives — the eligible scrolls under that same validated model**
 
-| figure | shows |
-|---|---|
-| [fig3 — PHerc 1447](figures/fig3_1447_budget_adequate_negative.png) | Densest crops from the budget-adequate probe: speckle, no closed forms, no baseline. |
-| [fig13 — every published 1447 segment](figures/fig13_rung9_1447_all_segments.png) | Contact sheet across the segments: uniform texture, no letterforms anywhere. |
-| [fig14 — the offset sweep's best window](figures/fig14_exp7_offset_peak.png) | The highest-response depth of nine tested from −207 to +207 µm. If the surface were merely offset from the ink layer, letters would appear here. |
-| [fig4 — the rest of the batch](figures/fig4_exp8_best_batch_segment.png) | The loudest of six segments across PHerc 1218, 0800 and 0268 — still speckle. |
+**fig3 — PHerc 1447.** Densest crops from the budget-adequate probe: speckle, no closed forms, no baseline.
+
+![fig3 — PHerc 1447](figures/fig3_1447_budget_adequate_negative.png)
+
+**fig13 — every published 1447 segment.** Contact sheet across the segments: uniform texture, no letterforms anywhere.
+
+![fig13 — every published 1447 segment](figures/fig13_rung9_1447_all_segments.png)
+
+**fig14 — the offset sweep's best window.** The highest-response depth of nine tested from −207 to +207 µm. If the surface were merely offset from the ink layer, letters would appear here.
+
+![fig14 — the offset sweep's best window](figures/fig14_exp7_offset_peak.png)
+
+**fig4 — the rest of the batch.** The loudest of six segments across PHerc 1218, 0800 and 0268 — still speckle.
+
+![fig4 — the rest of the batch](figures/fig4_exp8_best_batch_segment.png)
+
 
 **The surface-validity work**
 
-| figure | shows |
-|---|---|
-| [fig5 — the silent failure mode](figures/fig5_crosssection_failure_mode.png) | Five render depths of a self-grown surface plus its prediction. Every depth shows winding cross-sections, not a sheet: the grower produced geometry that renders plausibly and means nothing. |
-| [fig6 — what valid surfaces look like](figures/fig6_faceon_valid_surfaces.png) | Face-on crops of scan-team-published segments: continuous woven fibre. The dark-gap fraction separates these from cross-sections by about 8×. |
+**fig5 — the silent failure mode.** Five render depths of a self-grown surface plus its prediction. Every depth shows winding cross-sections, not a sheet: the grower produced geometry that renders plausibly and means nothing.
+
+![fig5 — the silent failure mode](figures/fig5_crosssection_failure_mode.png)
+
+**fig6 — what valid surfaces look like.** Face-on crops of scan-team-published segments: continuous woven fibre. The dark-gap fraction separates these from cross-sections by about 8×.
+
+![fig6 — what valid surfaces look like](figures/fig6_faceon_valid_surfaces.png)
+
 
 **Addendum figures (results that landed after this write-up was frozen)**
 
-| figure | shows |
-|---|---|
-| [fig16 — selection heuristic refuted](figures/fig16_family_selection_refuted.png) | Choosing training data by ink family does not improve transfer: the same-family pair loses on one target and wins on the other, because one set wins both. |
-| [fig7 — Scroll 5 validation](figures/fig7_scroll5_validation.png) | Our read of a real, read, held-out scroll (top) beside the community's prediction of the same segment (bottom). |
-| [fig8 — the same region, zoomed](figures/fig8_scroll5_zoom_pair.png) | 3 × 2 cm from both predictions for direct comparison. |
+**fig16 — selection heuristic refuted.** Choosing training data by ink family does not improve transfer: the same-family pair loses on one target and wins on the other, because one set wins both.
+
+![fig16 — selection heuristic refuted](figures/fig16_family_selection_refuted.png)
+
+**fig7 — Scroll 5 validation.** Our read of a real, read, held-out scroll (top) beside the community's prediction of the same segment (bottom).
+
+![fig7 — Scroll 5 validation](figures/fig7_scroll5_validation.png)
+
+**fig8 — the same region, zoomed.** 3 × 2 cm from both predictions for direct comparison.
+
+![fig8 — the same region, zoomed](figures/fig8_scroll5_zoom_pair.png)
+
 
 
 ## What this establishes
