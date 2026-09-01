@@ -247,7 +247,8 @@ In the order the argument runs, all in [`figures/`](figures/).
    Combined with rung 8 (the same model family reads Scroll 1 at 2.4 µm,
    7.9 µm and simulated 8.6 µm), the evidence says cross-scroll domain shift
    (ink chemistry / preservation state) dominates everything else — the
-   open-problems post's §7, now with a controlled experiment behind it.
+   open-problems post's cross-scroll-generalization bottleneck, now with a
+   controlled experiment behind it.
 4. **The 8.64 µm batch silence (rung 9) is therefore primarily a chemistry/
    domain problem.** A model that provably reads real 7.9 µm Scroll 1 (rung 8)
    and simulated 8.6 µm (rung 4) finds nothing on 60 segments across PHerc 1447, 1218, 800 and 268
@@ -304,8 +305,9 @@ Work after the ladder materially refines conclusions 3–4 above.
    predictions shipped with the segments also show no letterforms, so no
    existing model reads them either. The cause is batch-level: the shared
    116 keV / 1.2 m protocol and/or chemistry common to these four scrolls
-   but absent from the classic corpus. This is the strongest form of the
-   §6 diagnostic the open-problems post asked for — and it makes the
+   but absent from the classic corpus. This is the strongest form of the "what
+   happens if the models don't generalize" diagnostic the open-problems
+   post poses — and it makes the
    known-ink phantom scan under the 8.64 µm protocol the single most
    valuable experiment now available to the community (a question for the
    scanning team, not for model builders).

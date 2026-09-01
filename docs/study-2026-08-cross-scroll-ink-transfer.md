@@ -27,8 +27,9 @@ PHerc 1447 segments) yield no letterforms; and (iv) in
 the decisive control, PHerc 1203 — which uniquely has a native 2.4 µm scan
 under the same protocol as the reference training data — is equally silent.
 We conclude that **cross-scroll domain shift dominates all other factors**,
-turning the community's open problem §7 ("models fail across scrolls") from
-an observation into a controlled result. We release the full headless
+turning the community's cross-scroll-generalization bottleneck ("what
+happens if the models don't generalize?") from an observation into a
+controlled result. We release the full headless
 pipeline (segment growing, streamed rendering, probing at ~10 min/segment)
 plus four reproducible upstream VC3D bug reports.
 
@@ -207,7 +208,8 @@ Map" (project artifact).
 1. **Domain-robust features:** probe `scrollprize/ink_3d_dino_guided` and
    3D-DINO feature spaces on our render corpus — self-supervised features may
    carry ink contrast that supervised Scroll-1 heads discard.
-2. **Direct 3D ink morphology** (open problems §6c): unsupervised anomaly
+2. **Direct 3D ink morphology** (the open-problems post's "direct 3D ink
+   segmentation" future direction): unsupervised anomaly
    probing on recto surfaces at letter scale, no cross-scroll labels needed.
 3. **Fragment leverage:** fragments with IR-verified ink labels come from
    multiple physical scrolls — the only existing cross-chemistry labeled
